@@ -111,18 +111,19 @@ class HexEnv(gym.Env):
             elif self.illegal_move_mode == 'tie':
                 # If someone cheats, no one wins.
                 self.done = True
-                return self.state, 0.0, True, {'state', self.state}
+                return self.state, -0.25, True, {'state': self.state}
             else:
                 raise error.Error('Unsupported illegal move action: {}'.format(self.illegal_move_mode))
         else:
             HexEnv.make_move(self.state, action, self.player_color)
 
         # Opponent play
+        # TODO: not just copy past this is silly
         a = self.opponent_policy(self.state)
         # if HexEnv.pass_move(self.board_size, action):
         #     pass
         if HexEnv.resign_move(self.board_size, a):
-            return self.state, 1, True, {'state': self.state}
+            return self.state, 1., True, {'state': self.state}
         elif not HexEnv.valid_move(self.state, a):
             if self.illegal_move_mode == 'raise':
                 raise
@@ -132,7 +133,7 @@ class HexEnv(gym.Env):
             elif self.illegal_move_mode == 'tie':
                 # If someone cheats, no one wins.
                 self.done = True
-                return self.state, 0.0, True, {'state', self.state}
+                return self.state, 0.25, True, {'state': self.state}
         else:
             HexEnv.make_move(self.state, a, 1 - self.player_color)
 
