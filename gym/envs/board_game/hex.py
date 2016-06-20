@@ -51,7 +51,7 @@ class HexEnv(gym.Env):
         assert observation_type in ['numpy3c']
         self.observation_type = observation_type
 
-        assert illegal_move_mode in ['lose', 'raise']
+        assert illegal_move_mode in ['lose', 'raise', 'tie']
         self.illegal_move_mode = illegal_move_mode
 
         if self.observation_type != 'numpy3c':
@@ -108,6 +108,10 @@ class HexEnv(gym.Env):
                 # Automatic loss on illegal move
                 self.done = True
                 return self.state, -1., True, {'state': self.state}
+            elif self.illegal_move_mode == 'tie':
+                # If someone cheats, no one wins.
+                self.done = True
+                return self.state, 0.0, True, {'state', self.state}
             else:
                 raise error.Error('Unsupported illegal move action: {}'.format(self.illegal_move_mode))
         else:
@@ -125,6 +129,10 @@ class HexEnv(gym.Env):
             elif self.illegal_move_mode == 'lose':
                 self.done = True
                 return self.state, 1., True, {'state': self.state}
+            elif self.illegal_move_mode == 'tie':
+                # If someone cheats, no one wins.
+                self.done = True
+                return self.state, 0.0, True, {'state', self.state}
         else:
             HexEnv.make_move(self.state, a, 1 - self.player_color)
 
