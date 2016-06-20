@@ -119,6 +119,12 @@ class HexEnv(gym.Env):
         #     pass
         if HexEnv.resign_move(self.board_size, action):
             return self.state, 1, True, {'state': self.state}
+        elif not HexEnv.valid_move(self.state, action):
+            if self.illegal_move_mode == 'raise':
+                raise
+            elif self.illegal_move_mode == 'lose':
+                self.done = True
+                return self.state, 1., True, {'state': self.state}
         else:
             HexEnv.make_move(self.state, a, 1 - self.player_color)
 
