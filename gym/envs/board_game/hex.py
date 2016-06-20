@@ -117,9 +117,9 @@ class HexEnv(gym.Env):
         a = self.opponent_policy(self.state)
         # if HexEnv.pass_move(self.board_size, action):
         #     pass
-        if HexEnv.resign_move(self.board_size, action):
+        if HexEnv.resign_move(self.board_size, a):
             return self.state, 1, True, {'state': self.state}
-        elif not HexEnv.valid_move(self.state, action):
+        elif not HexEnv.valid_move(self.state, a):
             if self.illegal_move_mode == 'raise':
                 raise
             elif self.illegal_move_mode == 'lose':
