@@ -133,6 +133,7 @@ class HexEnv(gym.Env):
             elif self.illegal_move_mode == 'tie':
                 # If someone cheats, no one wins.
                 self.done = True
+                # print('opponent cheated with move {}'.format(a))
                 return self.state, 0.25, True, {'state': self.state}
         else:
             HexEnv.make_move(self.state, a, 1 - self.player_color)
